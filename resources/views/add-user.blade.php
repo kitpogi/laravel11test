@@ -27,7 +27,7 @@
                       </div>
                       <div class="mb-3">
                         <label for="formGroupExampleInput2" class="form-label">Email</label>
-                        <input type="email" name="email" value="{{old('email')}}"  class="form-control" id="formGroupExampleInput2" placeholder="Enter Email">
+                        <input type="text" name="email" value="{{old('email')}}"  class="form-control" id="formGroupExampleInput2" placeholder="Enter Email">
                         @error('email')
                             <span class="text-danger">{{$message}}</span>
                         @enderror
