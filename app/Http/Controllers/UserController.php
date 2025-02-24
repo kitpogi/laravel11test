@@ -43,7 +43,77 @@ class UserController extends Controller
         }
 
 
+    }
+
+    // public function EditUser(Request $request){
+    //     $request->validate([
+    //         'full_name' => 'required|string',
+    //         'email' => 'required|email|unique:users',
+    //         'phone_number' => 'required|',
 
 
+
+    //     ]);
+    //     try {
+    //         // update new user
+    //         $update_user = User::where('id:', $request->user_id)->update([
+    //             'full_name' => $request->full_name,
+    //             'email' => $request->email,
+    //             'phone_number' => $request->phone_number,
+
+    //         ]);
+
+
+    //         return redirect('/users')->with('success','User Updated Successfully');
+    //     } catch (\Exception $e) {
+    //         return redirect('/edit/user')->with('fail', $e->getMessage());
+    //     }
+    // }
+
+    public function EditUser(Request $request){
+        $request->validate([
+            'full_name' => 'required|string',
+            'email' => 'required|email|unique:users,email,' . $request->user_id, // Ignore current user email
+            'phone_number' => 'required',
+        ]);
+
+        try {
+            // Find the user first
+            $user = User::find($request->user_id);
+            if (!$user) {
+                return redirect('/users')->with('fail', 'User not found');
+            }
+
+            // Update user fields
+            $user->full_name = $request->full_name;
+            $user->email = $request->email;
+            $user->phone_number = $request->phone_number;
+            $user->save();
+
+            return redirect('/users')->with('success', 'User Updated Successfully');
+        } catch (\Exception $e) {
+            return redirect('/edit/user')->with('fail', $e->getMessage());
+        }
+    }
+
+
+    public function loadEditForm($id){
+        $user = User::find($id);
+
+        if (!$user) {
+            return redirect('/users')->with('fail', 'User not found');
+        }
+
+        return view('edit-user', compact('user'));
+    }
+
+    public function deleteUser ($id){
+        try{
+            User::where('id', $id)->delete();
+            return redirect('/users')->with('success', 'User Deleted Successfully');
+        } catch (\Exception $e ){
+            //throw $th
+            return redirect('/users')->with('fail', $e->getMessage());
+        }
     }
 }

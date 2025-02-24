@@ -15,10 +15,12 @@
                     Laravel 11 CRUD System
                     <a href="/add/user" class="btn btn-success btn-sm float-end">Add User</a>
                 </div>
-                @if (Session::has('success'))
+             @if (Session::has('success'))
                 <span class="alert alert-success p=2">{{Session::get('success')}}</span>
-
             @endif
+            @if (Session::has('fail'))
+            <span class="alert alert-danger p=2">{{Session::get('fail')}}</span>
+        @endif
                 <div class="card-body">
                     <table class="table table-sm table-striped table-bordered">
                         <thead>
@@ -28,6 +30,7 @@
                             <th>Phone Number</th>
                             <th>Registration Date</th>
                             <th>Last Update</th>
+                            <th colspan="2">Action</th>
                         </thead>
 
                         <tbody>
@@ -40,9 +43,15 @@
                                 <td>{{$item->phone_number}}</td>
                                 <td>{{$item->created_at}}</td>
                                 <td>{{$item->updated_at}}</td>
+                                <td><a href="/edit/{{$item->id}}" class="btn btn-primary btn-sm ">Edit</td>
+                                <td><a href="/delete/{{$item->id}}" class="btn btn-danger btn-sm    ">Delete</td>
                             </tr>
 
                             @endforeach
+                            @else
+                            <tr>
+                                <td colspan="8">No User Found!</td>
+                            </tr>
 
                             @endif
                         </tbody>
